@@ -19,25 +19,18 @@ public class App {
         System.out.println(body);
         
         // extrair dados (titulo, poster, classificação)
-<<<<<<< HEAD
-        var parser = new JsonParser();
-        List<Map<String, String>> listaDeFilmes = parser.parse(body);
-=======
         JsonParser parser = new JsonParser();
         List<Map<String, String>> listaDeFilmes = parser.parse(body);
         System.out.println(listaDeFilmes.size());
->>>>>>> 0bf28986cf9b7af825feb8f79713275cbc1de89c
 
         // exibir e manipular dados
         for (Map<String,String> filme : listaDeFilmes) {
             System.out.println(filme.get("title"));
             System.out.println(filme.get("image"));
             System.out.println(filme.get("imDbRating"));
-<<<<<<< HEAD
+
             System.out.println();
-            
-=======
->>>>>>> 0bf28986cf9b7af825feb8f79713275cbc1de89c
+        
         }
     }
 }
