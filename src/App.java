@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -10,8 +12,12 @@ public class App {
     public static void main(String[] args) throws Exception {
         
         // fazer uma conexão HTTP e buscar os tops filmes
-        String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json";
-        URI endereço = URI.create(url);
+        String urlTopMovies = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json";
+        //String urlTopTVs = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopTVs.json";
+        //String urlMostPopularMovies = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/MostPopularMovies.json";
+        //String urlMostPopularTVs = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/MostPopularTVs.json";
+        
+        URI endereço = URI.create(urlTopMovies);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder(endereço).GET().build();
         HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
@@ -24,11 +30,20 @@ public class App {
         System.out.println(listaDeFilmes.size());
 
         // exibir e manipular dados
-        for (Map<String,String> filme : listaDeFilmes) {
-            System.out.println(filme.get("title"));
-            System.out.println(filme.get("image"));
-            System.out.println(filme.get("imDbRating"));
 
+        StickerGenerator geradora = new StickerGenerator();
+        for (Map<String,String> filme : listaDeFilmes) {
+
+            String titulo = filme.get("title");
+            String URLimage = filme.get("image");
+            InputStream inputStream = new URL(URLimage).openStream();
+
+            String nomeArquivo = titulo + ".png";
+            
+            geradora.criar(inputStream, nomeArquivo);
+           
+            System.out.println(titulo);
+            System.out.println(filme.get("imDbRating"));
             System.out.println();
         
         }
