@@ -1,51 +1,42 @@
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
-import java.util.Map;
+
 
 public class App {
     public static void main(String[] args) throws Exception {
         
         // fazer uma conexão HTTP e buscar os tops filmes
-        String urlTopMovies = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json";
-        //String urlTopTVs = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopTVs.json";
-        //String urlMostPopularMovies = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/MostPopularMovies.json";
-        //String urlMostPopularTVs = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/MostPopularTVs.json";
-        
-        URI endereço = URI.create(urlTopMovies);
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder(endereço).GET().build();
-        HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-        String body = response.body();
-        System.out.println(body);
-        
-        // extrair dados (titulo, poster, classificação)
-        JsonParser parser = new JsonParser();
-        List<Map<String, String>> listaDeFilmes = parser.parse(body);
-        System.out.println(listaDeFilmes.size());
 
+
+        String url = "https://api.nasa.gov/planetary/apod?api_key=6qba0qpfNBmBvhG5wmhtfi7kUVektjglQ1klKopG&start_date=2022-06-8&end_date=2022-06-10";
+        ExtratorConteudo extrator = new ExtratorConteudoNasa();
+        
+        // String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json";
+        // ExtratorConteudo extrator = new ExtratorConteudoIMDB();
+
+
+        ClientHttp http = new ClientHttp();
+        String json = http.buscaDados(url);
+        
+       
         // exibir e manipular dados
+        List<Conteudo> conteudos = extrator.extraiConteudos(json);
 
         StickerGenerator geradora = new StickerGenerator();
-        for (Map<String,String> filme : listaDeFilmes) {
+        
+        for (int i = 0; i < 3; i++) {
+             Conteudo conteudo = conteudos.get(i);
 
-            String titulo = filme.get("title");
-            String URLimage = filme.get("image");
-            InputStream inputStream = new URL(URLimage).openStream();
-
-            String nomeArquivo = titulo + ".png";
+            InputStream inputStream = new URL(conteudo.getUrlImage()).openStream();
+            String nomeArquivo = "saida/" + conteudo.getTitulo() + ".png";
             
             geradora.criar(inputStream, nomeArquivo);
            
-            System.out.println(titulo);
-            System.out.println(filme.get("imDbRating"));
+            System.out.println(conteudo.getTitulo());
             System.out.println();
-        
         }
+
+       
     }
 }
