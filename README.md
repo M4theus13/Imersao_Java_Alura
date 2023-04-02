@@ -10,7 +10,3 @@ Projeto de imersão Java 2 realizado pela Alura
 
 ## Aula 03 | Ligando as pontas: Refatoração e orientação a objetos.
 - Objetivo: Obter imagens da API da Nasa e refatorar o código utilizando orientação à objetos.
-
-## Aula 04 | Criando nossa própria API com Spring.
-
-## Aula 05 | Publicando nossa API no Cloud.
